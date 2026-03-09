@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:latihan_kuis_a/models/movie_model.dart';
 
+import '../models/favorite_movie.dart';
+
 class MovieDetailPage extends StatefulWidget {
   final MovieModel movie;
 
@@ -44,9 +46,32 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          movie.title,
-                          style: Theme.of(context).textTheme.titleLarge,
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                movie.title,
+                                style: Theme.of(context).textTheme.titleLarge,
+                              ),
+                            ),
+                            ListenableBuilder(
+                              listenable: favoriteList,
+                              builder: (context, child) {
+                                final favorite = isFavorite(movie);
+                                return IconButton(
+                                  onPressed: () => toggleFavorite(movie),
+                                  icon: Icon(
+                                    favorite ? Icons.favorite : Icons
+                                        .favorite_outline,
+                                    color: favorite ? Theme
+                                        .of(context)
+                                        .colorScheme
+                                        .primary : null,
+                                  ),
+                                );
+                              },
+                            )
+                          ],
                         ),
                         Text(
                           movie.genre,

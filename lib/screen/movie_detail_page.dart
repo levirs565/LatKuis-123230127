@@ -32,35 +32,66 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
   @override
   Widget build(BuildContext context) {
     final movie = widget.movie;
+    final width = MediaQuery.sizeOf(context).width;
+    final wideMode = width > 768.0;
     return Scaffold(
       appBar: AppBar(title: Text(movie.title)),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Expanded(
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Image.network(movie.imgUrl, height: 320.0, fit: BoxFit.cover),
-                  _buildContent(movie, context),
-                ],
-              ),
+      body: !wideMode
+          ? Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Image.network(
+                          movie.imgUrl,
+                          height: 320.0,
+                          fit: BoxFit.cover,
+                        ),
+                        _buildContent(movie, context),
+                      ],
+                    ),
+                  ),
+                ),
+                _buildBottomButtons(movie),
+              ],
+            )
+          : Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Image.network(movie.imgUrl, width: 320.0, fit: BoxFit.cover),
+                // Text("aa"),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Expanded(
+                        child: SingleChildScrollView(
+                          child: _buildContent(movie, context),
+                        ),
+                      ),
+                      _buildBottomButtons(movie),
+                    ],
+                  ),
+                ),
+              ],
             ),
-          ),
-          Material(
-            elevation: 32.0,
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: FilledButton(
-                onPressed: () {
-                  launchUrl(Uri.parse(movie.movieUrl));
-                },
-                child: Text("Visit Wikipedia"),
-              ),
-            ),
-          ),
-        ],
+    );
+  }
+
+  Material _buildBottomButtons(MovieModel movie) {
+    return Material(
+      elevation: 32.0,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: FilledButton(
+          onPressed: () {
+            launchUrl(Uri.parse(movie.movieUrl));
+          },
+          child: Text("Visit Wikipedia"),
+        ),
       ),
     );
   }
@@ -137,52 +168,52 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
 
   Table _buildProperties(BuildContext context, MovieModel movie) {
     return Table(
-          columnWidths: {0: IntrinsicColumnWidth(), 1: FlexColumnWidth()},
-          border: TableBorder(
-            horizontalInside: BorderSide(
-              color: Theme.of(context).dividerColor,
-              width: 0.125,
-            ),
-          ),
+      columnWidths: {0: IntrinsicColumnWidth(), 1: FlexColumnWidth()},
+      border: TableBorder(
+        horizontalInside: BorderSide(
+          color: Theme.of(context).dividerColor,
+          width: 0.125,
+        ),
+      ),
+      children: [
+        TableRow(
           children: [
-            TableRow(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(right: 8.0),
-                  child: Text("Director"),
-                ),
-                Text(movie.director),
-              ],
+            Padding(
+              padding: const EdgeInsets.only(right: 8.0),
+              child: Text("Director"),
             ),
-            TableRow(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(right: 8.0),
-                  child: Text("Stars"),
-                ),
-                Wrap(
-                  crossAxisAlignment: WrapCrossAlignment.center,
-                  spacing: 8,
-                  children: movie.casts.indexed
-                      .expand(
-                        (cast) => [
-                          Text(cast.$2),
-                          if (cast.$1 != movie.casts.length - 1)
-                            Container(
-                              width: 6,
-                              height: 6,
-                              decoration: BoxDecoration(
-                                color: Theme.of(context).colorScheme.primary,
-                                shape: BoxShape.circle,
-                              ),
-                            ),
-                        ],
-                      )
-                      .toList(),
-                ),
-              ],
+            Text(movie.director),
+          ],
+        ),
+        TableRow(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(right: 8.0),
+              child: Text("Stars"),
+            ),
+            Wrap(
+              crossAxisAlignment: WrapCrossAlignment.center,
+              spacing: 8,
+              children: movie.casts.indexed
+                  .expand(
+                    (cast) => [
+                      Text(cast.$2),
+                      if (cast.$1 != movie.casts.length - 1)
+                        Container(
+                          width: 6,
+                          height: 6,
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).colorScheme.primary,
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                    ],
+                  )
+                  .toList(),
             ),
           ],
-        );
+        ),
+      ],
+    );
   }
 }

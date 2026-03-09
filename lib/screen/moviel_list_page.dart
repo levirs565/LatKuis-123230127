@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:latihan_kuis_a/component/favorite_button.dart';
 import 'package:latihan_kuis_a/models/favorite_movie.dart';
 import 'package:latihan_kuis_a/models/movie_model.dart';
 import 'package:latihan_kuis_a/screen/movie_detail_page.dart';
@@ -43,7 +44,6 @@ class MovieListPage extends StatelessWidget {
   }
 
   Widget _listItem(BuildContext context, MovieModel movie) {
-    final favorite = isFavorite(movie);
     return Card.outlined(
       clipBehavior: Clip.hardEdge,
       child: InkWell(
@@ -102,12 +102,9 @@ class MovieListPage extends StatelessWidget {
                 ],
               ),
             ),
-            IconButton(
-              onPressed: () => toggleFavorite(movie),
-              icon: Icon(
-                favorite ? Icons.favorite : Icons.favorite_outline,
-                color: favorite ? Theme.of(context).colorScheme.primary : null,
-              ),
+            FavoriteButton(
+              onClick: () => toggleFavorite(movie),
+              isFavorite: isFavorite(movie),
             ),
             SizedBox(width: 4.0,)
           ],

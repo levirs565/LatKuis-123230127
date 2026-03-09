@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:latihan_kuis_a/models/movie_model.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../models/favorite_movie.dart';
 
@@ -190,7 +191,9 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: FilledButton(
-                onPressed: () {},
+                onPressed: () {
+                  launchUrl(Uri.parse(movie.movieUrl));
+                },
                 child: Text("Visit Wikipedia"),
               ),
             ),

@@ -19,32 +19,49 @@ class LoginPage extends StatelessWidget {
     
      */
     return Scaffold(
-      appBar: AppBar(title: Text("Login")),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          spacing: 8.0,
-          children: [
-            TextField(
-              controller: _usernameTextController,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                label: Text("Username"),
+        child: Center(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              maxWidth: 320
+            ),
+            child: Card(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  spacing: 8.0,
+                  children: [
+                    Text(
+                      "Login",
+                      style: Theme.of(context).textTheme.titleLarge,
+                    ),
+                    TextField(
+                      controller: _usernameTextController,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        label: Text("Username"),
+                      ),
+                    ),
+                    TextField(
+                      controller: _passwordTextController,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        label: Text("Password"),
+                      ),
+                      obscureText: true,
+                    ),
+                    // Saya rasa outlined button lebih bagus daripada elevated button
+                    FilledButton(
+                        onPressed: () => _onLoginPressed(context),
+                        child: Text("Login")
+                    ),
+                  ],
+                ),
               ),
             ),
-            TextField(
-              controller: _passwordTextController,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                label: Text("Password"),
-              ),
-              obscureText: true,
-            ),
-            ElevatedButton(
-                onPressed: () => _onLoginPressed(context),
-                child: Text("Login")
-            ),
-          ],
+          ),
         ),
       ),
     );
@@ -54,7 +71,7 @@ class LoginPage extends StatelessWidget {
     final username = _usernameTextController.text.trim();
     final password = _passwordTextController.text.trim();
 
-    if (username.isNotEmpty && password.isNotEmpty) {
+    if (username == "levirs" && password == "127") {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Login berhasil"))
       );
